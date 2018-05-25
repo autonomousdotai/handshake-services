@@ -5,6 +5,7 @@ import (
 	"log"
 	"github.com/jinzhu/gorm"
 	"time"
+	"../bean"
 )
 
 type CommentDao struct {
@@ -56,4 +57,32 @@ func (commentDao CommentDao) Delete(dto models.Comment, tx *gorm.DB) (models.Com
 		return dto, err
 	}
 	return dto, nil
+}
+
+func (commentDao CommentDao) GetCommentPagination(userId int64, objectType string, objectId int64, pagination *bean.Pagination) (*bean.Pagination, error) {
+	dtos := []models.Comment{}
+	db := models.Database()
+	if pagination != nil {
+		db = db.Limit(pagination.PageSize)
+		db = db.Offset(pagination.PageSize * (pagination.Page - 1))
+	}
+	db = db.Where("object_type = ? AND object_id = ?", objectType, objectId)
+	err := db.Order("date_created desc").Find(&dtos).Error
+	if err != nil {
+		log.Print(err)
+		return pagination, err
+	}
+	pagination.Items = dtos
+	total := 0
+	if pagination.Page == 1 && len(dtos) < pagination.PageSize {
+		total = len(dtos)
+	} else {
+		err := db.Find(&dtos).Count(&total).Error
+		if err != nil {
+			log.Print(err)
+			return pagination, err
+		}
+	}
+	pagination.Total = total
+	return pagination, nil
 }

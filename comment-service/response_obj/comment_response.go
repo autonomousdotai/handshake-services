@@ -4,6 +4,7 @@ import (
 	"time"
 	"../models"
 	"../utils"
+	"../bean"
 )
 
 type CommentResponse struct {
@@ -34,3 +35,8 @@ func MakeArrayCommentResponse(models []models.Comment) []CommentResponse {
 	}
 	return results
 }
+
+func MakePaginationCommentResponse(pagination *bean.Pagination) PaginationResponse {
+	return MakePaginationResponse(pagination.Page, pagination.PageSize, pagination.Total, MakeArrayCommentResponse(pagination.Items.([]models.Comment)))
+}
+

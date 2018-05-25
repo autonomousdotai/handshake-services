@@ -12,7 +12,7 @@ func Database() *gorm.DB {
 	//open a db connection
 	if databaseConn == nil {
 		d, err := gorm.Open("mysql", setting.CurrentConfig().DB)
-		d.LogMode(true)
+		d.LogMode(false)
 		if err != nil {
 			log.Println(err)
 			return nil

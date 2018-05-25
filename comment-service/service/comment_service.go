@@ -28,3 +28,8 @@ func (commentService CommentService) CreateComment(userId int64, request request
 
 	return crowdFunding, nil
 }
+
+func (commentService CommentService) GetCommentPagination(userId int64, objectType string, objectId int64, pagination *bean.Pagination) (*bean.Pagination, error) {
+	pagination, err := commentDao.GetCommentPagination(userId, objectType, objectId, pagination)
+	return pagination, err
+}
