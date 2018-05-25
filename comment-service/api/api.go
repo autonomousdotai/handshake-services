@@ -14,20 +14,14 @@ import (
 type Api struct {
 }
 
-func (api Api) Init(router *gin.Engine) *gin.RouterGroup {
-	apiGroupApi := router.Group("/api")
-	{
-		apiGroupApi.GET("/", func(context *gin.Context) {
-			context.String(200, "Comment API")
-		})
-		apiGroupApi.GET("/comments", func(context *gin.Context) {
-			api.GetComments(context)
-		})
-		apiGroupApi.POST("/comment", func(context *gin.Context) {
-			api.CreateComment(context)
-		})
-	}
-	return apiGroupApi
+func (api Api) Init(router *gin.Engine) *gin.Engine {
+	router.GET("/list", func(context *gin.Context) {
+		api.GetComments(context)
+	})
+	router.POST("/", func(context *gin.Context) {
+		api.CreateComment(context)
+	})
+	return router
 }
 
 func (api Api) CreateComment(context *gin.Context) {
