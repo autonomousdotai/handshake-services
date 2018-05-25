@@ -1,11 +1,11 @@
 package dao
 
 import (
-	"../models"
+	"github.com/autonomousdotai/handshake-services/comment-service/models"
 	"log"
 	"github.com/jinzhu/gorm"
 	"time"
-	"../bean"
+	"github.com/autonomousdotai/handshake-services/comment-service/bean"
 )
 
 type CommentDao struct {

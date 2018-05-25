@@ -1,11 +1,11 @@
 package service
 
 import (
-	"../models"
-	"../bean"
+	"github.com/autonomousdotai/handshake-services/comment-service/models"
+	"github.com/autonomousdotai/handshake-services/comment-service/bean"
 	"errors"
 	"log"
-	"../request_obj"
+	"github.com/autonomousdotai/handshake-services/comment-service/request_obj"
 )
 
 type CommentService struct {

@@ -2,9 +2,9 @@ package response_obj
 
 import (
 	"time"
-	"../models"
-	"../utils"
-	"../bean"
+	"github.com/autonomousdotai/handshake-services/comment-service/models"
+	"github.com/autonomousdotai/handshake-services/comment-service/utils"
+	"github.com/autonomousdotai/handshake-services/comment-service/bean"
 )
 
 type CommentResponse struct {

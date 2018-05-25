@@ -2,13 +2,13 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"../response_obj"
-	"../request_obj"
+	"github.com/autonomousdotai/handshake-services/comment-service/response_obj"
+	"github.com/autonomousdotai/handshake-services/comment-service/request_obj"
 	"net/http"
-	"../bean"
+	"github.com/autonomousdotai/handshake-services/comment-service/bean"
 	"log"
 	"strconv"
-	"../utils"
+	"github.com/autonomousdotai/handshake-services/comment-service/utils"
 )
 
 type Api struct {
