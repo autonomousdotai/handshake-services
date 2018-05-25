@@ -9,29 +9,23 @@ import (
 type Api struct {
 }
 
-func (api Api) Init(router *gin.Engine) *gin.RouterGroup {
-	apiGroupApi := router.Group("/api")
-	{
-		apiGroupApi.GET("/", func(context *gin.Context) {
-			context.String(200, "Algolia API")
-		})
-		apiGroupApi.GET("/search", func(context *gin.Context) {
-			api.Search(context)
-		})
-		apiGroupApi.GET("/objects", func(context *gin.Context) {
-			api.GetObjects(context)
-		})
-		apiGroupApi.POST("/objects", func(context *gin.Context) {
-			api.AddObjects(context)
-		})
-		apiGroupApi.PUT("/objects", func(context *gin.Context) {
-			api.PartialUpdateObjects(context)
-		})
-		apiGroupApi.DELETE("/objects", func(context *gin.Context) {
-			api.DeleteObjects(context)
-		})
-	}
-	return apiGroupApi
+func (api Api) Init(router *gin.Engine) *gin.Engine {
+	router.GET("/search", func(context *gin.Context) {
+		api.Search(context)
+	})
+	router.GET("/objects", func(context *gin.Context) {
+		api.GetObjects(context)
+	})
+	router.POST("/objects", func(context *gin.Context) {
+		api.AddObjects(context)
+	})
+	router.PUT("/objects", func(context *gin.Context) {
+		api.PartialUpdateObjects(context)
+	})
+	router.DELETE("/objects", func(context *gin.Context) {
+		api.DeleteObjects(context)
+	})
+	return router
 }
 
 func (api Api) Search(context *gin.Context) {
