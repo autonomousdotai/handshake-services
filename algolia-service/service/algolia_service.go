@@ -31,8 +31,8 @@ func (self AlgoliaService) AddObjects(objects []algoliasearch.Object) (algoliase
 	return res, err
 }
 
-func (self AlgoliaService) UpdateObjects(objects []algoliasearch.Object) (algoliasearch.BatchRes, error) {
-	res, err := self.Index.UpdateObjects(objects)
+func (self AlgoliaService) PartialUpdateObjects(objects []algoliasearch.Object) (algoliasearch.BatchRes, error) {
+	res, err := self.Index.PartialUpdateObjects(objects)
 	return res, err
 }
 

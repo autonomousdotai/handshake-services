@@ -25,7 +25,7 @@ func (api Api) Init(router *gin.Engine) *gin.RouterGroup {
 			api.AddObjects(context)
 		})
 		apiGroupApi.PUT("/objects", func(context *gin.Context) {
-			api.UpdateObjects(context)
+			api.PartialUpdateObjects(context)
 		})
 		apiGroupApi.DELETE("/objects", func(context *gin.Context) {
 			api.DeleteObjects(context)
@@ -83,14 +83,14 @@ func (api Api) AddObjects(context *gin.Context) {
 	return
 }
 
-func (api Api) UpdateObjects(context *gin.Context) {
+func (api Api) PartialUpdateObjects(context *gin.Context) {
 	objects := new([]algoliasearch.Object)
 	err := context.Bind(&objects)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	result, err := algoliaService.UpdateObjects(*objects)
+	result, err := algoliaService.PartialUpdateObjects(*objects)
 	if err != nil {
 		context.JSON(http.StatusNotFound, nil)
 		return
