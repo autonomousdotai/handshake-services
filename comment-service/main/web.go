@@ -37,7 +37,11 @@ func main() {
 	index := router.Group("/")
 	{
 		index.GET("/", func(context *gin.Context) {
-			context.String(http.StatusOK, "Comment API")
+			result := map[string]interface{}{
+				"status":  1,
+				"message": "Comment Service API",
+			}
+			context.JSON(http.StatusOK, result)
 		})
 	}
 	api := api.Api{}
