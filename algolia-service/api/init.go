@@ -1,8 +1,8 @@
 package api
 
 import (
-	"../service"
-	"../setting"
+	"github.com/autonomousdotai/handshake-services/algolia-service/service"
+	"github.com/autonomousdotai/handshake-services/algolia-service/setting"
 )
 
 func CreateAlgoliaService() (service.AlgoliaService) {
