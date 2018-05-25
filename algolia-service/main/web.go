@@ -44,8 +44,10 @@ func main() {
 			context.JSON(http.StatusOK, result)
 		})
 	}
-	api := api.Api{}
-	api.Init(router)
+	handshake := api.HandshakeApi{}
+	handshake.Init(router)
+	user := api.UserApi{}
+	user.Init(router)
 	router.Run(fmt.Sprintf(":%d", configuration.ServicePort))
 }
 
@@ -64,7 +66,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	// Gin Cors setting
 	return cors.New(cors.Config{
 		AllowOrigins:     []string{setting.CurrentConfig().OriginDomainLocal},
-		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE", "UPDATE"},
+		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Content-Type", "Origin", "Device-Type", "Device-Id", "*"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,

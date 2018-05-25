@@ -6,29 +6,32 @@ import (
 	"github.com/algolia/algoliasearch-client-go/algoliasearch"
 )
 
-type Api struct {
+type HandshakeApi struct {
 }
 
-func (api Api) Init(router *gin.Engine) *gin.Engine {
-	router.GET("/search", func(context *gin.Context) {
-		api.Search(context)
-	})
-	router.GET("/objects", func(context *gin.Context) {
-		api.GetObjects(context)
-	})
-	router.POST("/objects", func(context *gin.Context) {
-		api.AddObjects(context)
-	})
-	router.PUT("/objects", func(context *gin.Context) {
-		api.PartialUpdateObjects(context)
-	})
-	router.DELETE("/objects", func(context *gin.Context) {
-		api.DeleteObjects(context)
-	})
-	return router
+func (api HandshakeApi) Init(router *gin.Engine) *gin.RouterGroup {
+	handshakeApi := router.Group("/handshake")
+	{
+		handshakeApi.GET("/search", func(context *gin.Context) {
+			api.Search(context)
+		})
+		handshakeApi.GET("/objects", func(context *gin.Context) {
+			api.GetObjects(context)
+		})
+		handshakeApi.POST("/objects", func(context *gin.Context) {
+			api.AddObjects(context)
+		})
+		handshakeApi.PUT("/objects", func(context *gin.Context) {
+			api.PartialUpdateObjects(context)
+		})
+		handshakeApi.DELETE("/objects", func(context *gin.Context) {
+			api.DeleteObjects(context)
+		})
+	}
+	return handshakeApi
 }
 
-func (api Api) Search(context *gin.Context) {
+func (api HandshakeApi) Search(context *gin.Context) {
 	mapParams := new(algoliasearch.Map)
 	err := context.Bind(&mapParams)
 	if err != nil {
@@ -36,7 +39,7 @@ func (api Api) Search(context *gin.Context) {
 		return
 	}
 	keyword := context.Query("keyword")
-	result, err := algoliaService.Search(keyword, *mapParams)
+	result, err := handshakeService.Search(keyword, *mapParams)
 	if err != nil {
 		context.JSON(http.StatusNotFound, nil)
 		return
@@ -45,14 +48,14 @@ func (api Api) Search(context *gin.Context) {
 	return
 }
 
-func (api Api) GetObjects(context *gin.Context) {
+func (api HandshakeApi) GetObjects(context *gin.Context) {
 	objectIDs := new([]string)
 	err := context.Bind(&objectIDs)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	result, err := algoliaService.GetObjects(*objectIDs)
+	result, err := handshakeService.GetObjects(*objectIDs)
 	if err != nil {
 		context.JSON(http.StatusNotFound, nil)
 		return
@@ -61,14 +64,14 @@ func (api Api) GetObjects(context *gin.Context) {
 	return
 }
 
-func (api Api) AddObjects(context *gin.Context) {
+func (api HandshakeApi) AddObjects(context *gin.Context) {
 	objects := new([]algoliasearch.Object)
 	err := context.Bind(&objects)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	result, err := algoliaService.AddObjects(*objects)
+	result, err := handshakeService.AddObjects(*objects)
 	if err != nil {
 		context.JSON(http.StatusNotFound, nil)
 		return
@@ -77,14 +80,14 @@ func (api Api) AddObjects(context *gin.Context) {
 	return
 }
 
-func (api Api) PartialUpdateObjects(context *gin.Context) {
+func (api HandshakeApi) PartialUpdateObjects(context *gin.Context) {
 	objects := new([]algoliasearch.Object)
 	err := context.Bind(&objects)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	result, err := algoliaService.PartialUpdateObjects(*objects)
+	result, err := handshakeService.PartialUpdateObjects(*objects)
 	if err != nil {
 		context.JSON(http.StatusNotFound, nil)
 		return
@@ -93,14 +96,14 @@ func (api Api) PartialUpdateObjects(context *gin.Context) {
 	return
 }
 
-func (api Api) DeleteObjects(context *gin.Context) {
+func (api HandshakeApi) DeleteObjects(context *gin.Context) {
 	objectIDs := new([]string)
 	err := context.Bind(&objectIDs)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	result, err := algoliaService.DeleteObjects(*objectIDs)
+	result, err := handshakeService.DeleteObjects(*objectIDs)
 	if err != nil {
 		context.JSON(http.StatusNotFound, nil)
 		return

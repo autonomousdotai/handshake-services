@@ -7,12 +7,13 @@ import (
 )
 
 type Configuration struct {
-	ServicePort          int
-	AlgoliaApplicationID string
-	AlgoliaAPIKey        string
-	AlgoliaIndexName     string
-	OriginDomainLocal    string
-	OriginDomainRun      []string
+	ServicePort              int
+	AlgoliaApplicationID     string
+	AlgoliaAPIKey            string
+	AlgoliaHanshakeIndexName string
+	AlgoliaUserIndexName     string
+	OriginDomainLocal        string
+	OriginDomainRun          []string
 }
 
 func (configuration Configuration) String() string {

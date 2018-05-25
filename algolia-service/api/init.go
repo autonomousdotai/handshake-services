@@ -5,10 +5,17 @@ import (
 	"github.com/autonomousdotai/handshake-services/algolia-service/setting"
 )
 
-func CreateAlgoliaService() (service.AlgoliaService) {
+func CreateHandshakeAlgoliaService() (service.AlgoliaService) {
 	sv := service.AlgoliaService{}
-	sv = sv.Init(setting.CurrentConfig().AlgoliaApplicationID, setting.CurrentConfig().AlgoliaAPIKey, setting.CurrentConfig().AlgoliaIndexName)
+	sv = sv.Init(setting.CurrentConfig().AlgoliaApplicationID, setting.CurrentConfig().AlgoliaAPIKey, setting.CurrentConfig().AlgoliaHanshakeIndexName)
 	return sv
 }
 
-var algoliaService = CreateAlgoliaService()
+func CreateUserAlgoliaService() (service.AlgoliaService) {
+	sv := service.AlgoliaService{}
+	sv = sv.Init(setting.CurrentConfig().AlgoliaApplicationID, setting.CurrentConfig().AlgoliaAPIKey, setting.CurrentConfig().AlgoliaUserIndexName)
+	return sv
+}
+
+var handshakeService = CreateHandshakeAlgoliaService()
+var userService = CreateUserAlgoliaService()
