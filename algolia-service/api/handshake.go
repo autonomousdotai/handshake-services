@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/algolia/algoliasearch-client-go/algoliasearch"
+	"log"
 )
 
 type HandshakeApi struct {
@@ -14,6 +15,9 @@ func (api HandshakeApi) Init(router *gin.Engine) *gin.RouterGroup {
 	{
 		handshakeApi.GET("/search", func(context *gin.Context) {
 			api.Search(context)
+		})
+		handshakeApi.GET("/object", func(context *gin.Context) {
+			api.GetObject(context)
 		})
 		handshakeApi.GET("/objects", func(context *gin.Context) {
 			api.GetObjects(context)
@@ -48,15 +52,28 @@ func (api HandshakeApi) Search(context *gin.Context) {
 	return
 }
 
-func (api HandshakeApi) GetObjects(context *gin.Context) {
-	objectIDs := new([]string)
-	err := context.Bind(&objectIDs)
+func (api HandshakeApi) GetObject(context *gin.Context) {
+	objectID := context.Query("objectID")
+	result, err := handshakeService.GetObjects([]string{objectID})
 	if err != nil {
-		context.JSON(http.StatusBadRequest, nil)
+		log.Println(err)
+		context.JSON(http.StatusNotFound, nil)
 		return
 	}
-	result, err := handshakeService.GetObjects(*objectIDs)
+	if len(result) > 0 {
+		context.JSON(http.StatusOK, result[0])
+		return
+	} else {
+		context.JSON(http.StatusNotFound, nil)
+		return
+	}
+}
+
+func (api HandshakeApi) GetObjects(context *gin.Context) {
+	objectIDs := context.QueryArray("objectIDs")
+	result, err := handshakeService.GetObjects(objectIDs)
 	if err != nil {
+		log.Println(err)
 		context.JSON(http.StatusNotFound, nil)
 		return
 	}
