@@ -6,27 +6,60 @@ import (
 	"errors"
 	"log"
 	"github.com/autonomousdotai/handshake-services/comment-service/request_obj"
+	"mime/multipart"
+	"strings"
+	"fmt"
+	"time"
 )
 
 type CommentService struct {
 }
 
-func (commentService CommentService) CreateComment(userId int64, request request_obj.CommentRequest) (models.Comment, *bean.AppError) {
-	crowdFunding := models.Comment{}
+func (commentService CommentService) CreateComment(userId int64, request request_obj.CommentRequest, sourceFile *multipart.File, sourceFileHeader *multipart.FileHeader) (models.Comment, *bean.AppError) {
+	tx := models.Database().Begin()
 
-	crowdFunding.UserId = userId
-	crowdFunding.ObjectType = request.ObjectType
-	crowdFunding.ObjectId = request.ObjectId
-	crowdFunding.Comment = request.Comment
-	crowdFunding.Status = 1
+	comment := models.Comment{}
 
-	crowdFunding, err := commentDao.Create(crowdFunding, nil)
+	comment.UserId = userId
+	comment.ObjectType = request.ObjectType
+	comment.ObjectId = request.ObjectId
+	comment.Comment = request.Comment
+	comment.Status = 1
+
+	comment, err := commentDao.Create(comment, tx)
 	if err != nil {
 		log.Println(err)
-		return crowdFunding, &bean.AppError{errors.New(err.Error()), "Error occurred, please try again", -1, "error_occurred"}
+
+		tx.Rollback()
+		return comment, &bean.AppError{errors.New(err.Error()), "Error occurred, please try again", -1, "error_occurred"}
 	}
 
-	return crowdFunding, nil
+	filePath := ""
+	if sourceFile != nil && sourceFileHeader != nil {
+		uploadImageFolder := "/comment"
+		fileName := sourceFileHeader.Filename
+		imageExt := strings.Split(fileName, ".")[1]
+		fileNameImage := fmt.Sprintf("comment-%d-image-%s.%s", comment.ID, time.Now().Format("20060102150405"), imageExt)
+		err := fileUploadService.UploadFormFile(sourceFile, uploadImageFolder, fileNameImage, sourceFileHeader)
+		if err != nil {
+			log.Println(err)
+
+			tx.Rollback()
+			return comment, &bean.AppError{errors.New(err.Error()), "Error occurred, please try again", -1, "error_occurred"}
+		}
+		filePath = uploadImageFolder + "/" + fileNameImage
+	}
+
+	comment.Image = filePath
+	comment, err = commentDao.Update(comment, tx)
+	if err != nil {
+		log.Println(err)
+		return comment, &bean.AppError{errors.New(err.Error()), "Error occurred, please try again", -1, "error_occurred"}
+	}
+
+	tx.Commit()
+
+	return comment, nil
 }
 
 func (commentService CommentService) GetCommentPagination(userId int64, objectType string, objectId int64, pagination *bean.Pagination) (*bean.Pagination, error) {

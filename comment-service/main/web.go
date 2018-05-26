@@ -63,8 +63,8 @@ func Logger() gin.HandlerFunc {
 func CORSMiddleware() gin.HandlerFunc {
 	// Gin Cors setting
 	return cors.New(cors.Config{
-		AllowOrigins:     []string{setting.CurrentConfig().OriginDomainLocal},
-		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE", "UPDATE"},
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Content-Type", "Origin", "Device-Type", "Device-Id", "*"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
