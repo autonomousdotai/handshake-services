@@ -40,7 +40,7 @@ func (commentService CommentService) CreateComment(userId int64, request request
 		fileName := sourceFileHeader.Filename
 		imageExt := strings.Split(fileName, ".")[1]
 		fileNameImage := fmt.Sprintf("comment-%d-image-%s.%s", comment.ID, time.Now().Format("20060102150405"), imageExt)
-		err := fileUploadService.UploadFormFile(sourceFile, uploadImageFolder, fileNameImage, sourceFileHeader)
+		err := fileUploadService.UploadFormFile(*sourceFile, uploadImageFolder, fileNameImage, sourceFileHeader)
 		if err != nil {
 			log.Println(err)
 

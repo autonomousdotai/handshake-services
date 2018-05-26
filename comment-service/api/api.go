@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"github.com/autonomousdotai/handshake-services/comment-service/utils"
 	"encoding/json"
-	"mime/multipart"
 	"strings"
 )
 
