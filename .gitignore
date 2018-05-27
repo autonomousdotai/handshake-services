@@ -5,3 +5,5 @@ comment-service/logs
 comment-service/setting/*.json
 algolia-service/logs
 algolia-service/setting/*.json
+solr-service/logs
+solr-service/setting/*.json
