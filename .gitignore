@@ -3,7 +3,10 @@
 */node_modules
 comment-service/logs
 comment-service/setting/*.json
+comment-service/vendor
 algolia-service/logs
 algolia-service/setting/*.json
+algoia-service/vendor
 solr-service/logs
 solr-service/setting/*.json
+solr-service/vendor
