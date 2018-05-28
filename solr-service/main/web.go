@@ -10,8 +10,6 @@ import (
 	"time"
 	"github.com/autonomousdotai/handshake-services/solr-service/api"
 	"github.com/autonomousdotai/handshake-services/solr-service/setting"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/contrib/gzip"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,9 +28,6 @@ func main() {
 	// Setting router
 	router := gin.Default()
 	router.Use(Logger())
-	router.Use(CORSMiddleware())
-	router.Use(AuthorizeMiddleware())
-	router.Use(gzip.Gzip(gzip.DefaultCompression))
 	// Router Index
 	index := router.Group("/")
 	{
@@ -59,28 +54,5 @@ func Logger() gin.HandlerFunc {
 		latency := time.Since(t)
 		log.Print("Request: " + context.Request.URL.String() + " | " + context.Request.Method + " - Status: " + strconv.Itoa(status) + " - " +
 			latency.String())
-	}
-}
-
-func CORSMiddleware() gin.HandlerFunc {
-	// Gin Cors setting
-	return cors.New(cors.Config{
-		AllowOrigins:     []string{setting.CurrentConfig().OriginDomainLocal},
-		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE", "PATCH"},
-		AllowHeaders:     []string{"Content-Type", "Origin", "Device-Type", "Device-Id", "*"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return true
-		},
-		MaxAge: 12 * time.Hour,
-	})
-}
-
-func AuthorizeMiddleware() gin.HandlerFunc {
-	return func(context *gin.Context) {
-		userId, _ := strconv.ParseInt(context.GetHeader("User-Id"), 10, 64)
-		context.Set("UserId", userId)
-		context.Next()
 	}
 }
