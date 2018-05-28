@@ -7,6 +7,11 @@ import (
 	"github.com/autonomousdotai/handshake-services/comment-service/bean"
 )
 
+type UserResponse struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
 type CommentResponse struct {
 	DateCreated time.Time `json:"date_created"`
 	ID          int64     `json:"id"`
@@ -39,4 +44,3 @@ func MakeArrayCommentResponse(models []models.Comment) []CommentResponse {
 func MakePaginationCommentResponse(pagination *bean.Pagination) PaginationResponse {
 	return MakePaginationResponse(pagination.Page, pagination.PageSize, pagination.Total, MakeArrayCommentResponse(pagination.Items.([]models.Comment)))
 }
-

@@ -17,6 +17,7 @@ type Comment struct {
 	Comment      string
 	Image        string
 	Status       int
+	User         User
 }
 
 func (Comment) TableName() string {
