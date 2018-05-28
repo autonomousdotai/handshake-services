@@ -69,10 +69,13 @@ func (commentService CommentService) CreateComment(userId int64, request request
 func (commentService CommentService) GetCommentPagination(userId int64, objectType string, objectId int64, pagination *bean.Pagination) (*bean.Pagination, error) {
 	pagination, err := commentDao.GetCommentPagination(userId, objectType, objectId, pagination)
 	comments := pagination.Items.([]models.Comment)
+	items := []models.Comment{}
 	for _, comment := range comments {
 		user, _ := commentService.GetUser(comment.UserId)
 		comment.User = user
+		items = append(items, comment)
 	}
+	pagination.Items = items
 	return pagination, err
 }
 
