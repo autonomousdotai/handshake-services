@@ -39,6 +39,7 @@ func (commentService CommentService) CreateComment(userId int64, request request
 
 	filePath := ""
 	if sourceFile != nil && sourceFileHeader != nil {
+		//upload image for comment
 		uploadImageFolder := "comment"
 		fileName := sourceFileHeader.Filename
 		imageExt := strings.Split(fileName, ".")[1]
