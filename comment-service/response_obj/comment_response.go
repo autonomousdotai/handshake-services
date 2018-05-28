@@ -8,17 +8,21 @@ import (
 )
 
 type UserResponse struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
+	ID     int64  `json:"id"`
+	Email  string `json:"email"`
+	Name   string `json:"name"`
+	Avatar string `json:"avatar"`
+	Status int    `json:"status"`
 }
 
 type CommentResponse struct {
-	DateCreated time.Time `json:"date_created"`
-	ID          int64     `json:"id"`
-	UserId      int64     `json:"user_id"`
-	Comment     string    `json:"comment"`
-	Image       string    `json:"image"`
-	Status      int       `json:"status"`
+	DateCreated time.Time    `json:"date_created"`
+	ID          int64        `json:"id"`
+	UserId      int64        `json:"user_id"`
+	Comment     string       `json:"comment"`
+	Image       string       `json:"image"`
+	Status      int          `json:"status"`
+	User        UserResponse `json:"user"`
 }
 
 func MakeCommentResponse(model models.Comment) CommentResponse {
@@ -29,6 +33,16 @@ func MakeCommentResponse(model models.Comment) CommentResponse {
 	result.Image = utils.CdnUrlFor(model.Image)
 	result.Status = model.Status
 	result.DateCreated = model.DateCreated
+	result.User = MakeUserResponse(model.User)
+	return result
+}
+
+func MakeUserResponse(model models.User) UserResponse {
+	result := UserResponse{}
+	result.ID = model.ID
+	result.Email = model.Email
+	result.Name = model.Name
+	result.Avatar = utils.CdnUrlFor(model.Avatar)
 	return result
 }
 

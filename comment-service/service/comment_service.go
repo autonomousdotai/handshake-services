@@ -77,23 +77,23 @@ func (commentService CommentService) GetCommentPagination(userId int64, objectTy
 }
 
 func (commentService CommentService) GetUser(userId int64) (models.User, error) {
-	result := models.User{}
-	url := fmt.Sprintf("%s/%d", setting.CurrentConfig().DispatcherServiceUrl+"/user", userId)
+	result := models.JsonUserResponse{}
+	url := fmt.Sprintf("%s/%d", setting.CurrentConfig().DispatcherServiceUrl+"/system/user", userId)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Println(err)
-		return result, err
+		return result.Data, err
 	}
 	req.Header.Set("Content-Type", "application/json")
 	bodyBytes, err := netUtil.CurlRequest(req)
 	if err != nil {
 		log.Println(err)
-		return result, err
+		return result.Data, err
 	}
 	err = json.Unmarshal(bodyBytes, &result)
 	if err != nil {
 		log.Println(err)
-		return result, err
+		return result.Data, err
 	}
-	return result, nil
+	return result.Data, err
 }

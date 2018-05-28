@@ -6,7 +6,16 @@ import (
 	_ "encoding/gob"
 )
 
+type JsonUserResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+	Data    User   `json:"data"`
+}
+
 type User struct {
-	ID   int64
-	Name string
+	ID     int64  `json:"id"`
+	Email  string `json:"email"`
+	Name   string `json:"name"`
+	Avatar string `json:"avatar"`
+	Status int    `json:"status"`
 }
