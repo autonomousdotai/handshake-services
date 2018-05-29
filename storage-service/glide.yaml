@@ -1,0 +1,4 @@
+package: github.com/autonomousdotai/handshake-services/solr-service
+import:
+- package: github.com/gin-gonic/gin
+- package: cloud.google.com/go/storage
