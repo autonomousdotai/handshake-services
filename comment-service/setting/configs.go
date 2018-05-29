@@ -17,6 +17,7 @@ type Configuration struct {
 	OriginDomainLocal    string
 	OriginDomainRun      []string
 	DispatcherServiceUrl string
+	StorageServiceUrl    string
 }
 
 func (configuration Configuration) String() string {

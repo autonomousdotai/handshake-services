@@ -44,14 +44,14 @@ func (commentService CommentService) CreateComment(userId int64, request request
 		fileName := sourceFileHeader.Filename
 		imageExt := strings.Split(fileName, ".")[1]
 		fileNameImage := fmt.Sprintf("comment-%d-image-%s.%s", comment.ID, time.Now().Format("20060102150405"), imageExt)
-		err := fileUploadService.UploadFormFile(*sourceFile, uploadImageFolder, fileNameImage, sourceFileHeader)
+		filePath = uploadImageFolder + "/" + fileNameImage
+		err := fileUploadService.UploadFile(filePath, sourceFile)
 		if err != nil {
 			log.Println(err)
 
 			tx.Rollback()
 			return comment, &bean.AppError{errors.New(err.Error()), "Error occurred, please try again", -1, "error_occurred"}
 		}
-		filePath = uploadImageFolder + "/" + fileNameImage
 	}
 
 	comment.Image = filePath
