@@ -11,11 +11,6 @@ type Configuration struct {
 	DB                   string
 	CdnDomain            string
 	CdnHttps             bool
-	GSCredentialsFile    string
-	GSBucketName         string
-	UploadFolder         string
-	OriginDomainLocal    string
-	OriginDomainRun      []string
 	DispatcherServiceUrl string
 	StorageServiceUrl    string
 }
