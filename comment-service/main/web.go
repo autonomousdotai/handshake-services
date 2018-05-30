@@ -9,13 +9,12 @@ import (
 	"strconv"
 	"time"
 	"github.com/autonomousdotai/handshake-services/comment-service/api"
-	"github.com/autonomousdotai/handshake-services/comment-service/setting"
 	"github.com/gin-gonic/gin"
+	"github.com/autonomousdotai/handshake-services/comment-service/configs"
 )
 
 func main() {
 
-	configuration := setting.CurrentConfig()
 	// Logger
 	logFile, err := os.OpenFile("logs/autonomous_service.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
@@ -42,7 +41,7 @@ func main() {
 	}
 	api := api.Api{}
 	api.Init(router)
-	router.Run(fmt.Sprintf(":%d", configuration.ServicePort))
+	router.Run(fmt.Sprintf(":%d", configs.ServicePort))
 }
 
 func Logger() gin.HandlerFunc {

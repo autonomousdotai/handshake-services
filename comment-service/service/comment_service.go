@@ -6,7 +6,7 @@ import (
 	"errors"
 	"log"
 	"github.com/autonomousdotai/handshake-services/comment-service/request_obj"
-	"github.com/autonomousdotai/handshake-services/comment-service/setting"
+	"github.com/autonomousdotai/handshake-services/comment-service/configs"
 	"mime/multipart"
 	"strings"
 	"fmt"
@@ -81,7 +81,7 @@ func (commentService CommentService) GetCommentPagination(userId int64, objectTy
 
 func (commentService CommentService) GetUser(userId int64) (models.User, error) {
 	result := models.JsonUserResponse{}
-	url := fmt.Sprintf("%s/%d", setting.CurrentConfig().DispatcherServiceUrl+"/system/user", userId)
+	url := fmt.Sprintf("%s/%d", configs.DispatcherServiceUrl+"/system/user", userId)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Println(err)
