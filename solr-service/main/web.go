@@ -9,13 +9,12 @@ import (
 	"strconv"
 	"time"
 	"github.com/autonomousdotai/handshake-services/solr-service/api"
-	"github.com/autonomousdotai/handshake-services/solr-service/setting"
+	"github.com/autonomousdotai/handshake-services/solr-service/configs"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	configuration := setting.CurrentConfig()
 	// Logger
 	logFile, err := os.OpenFile("logs/autonomous_service.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
@@ -43,7 +42,7 @@ func main() {
 	handshake.Init(router)
 	user := api.UserApi{}
 	user.Init(router)
-	router.Run(fmt.Sprintf(":%d", configuration.ServicePort))
+	router.Run(fmt.Sprintf(":%d", configs.ServicePort))
 }
 
 func Logger() gin.HandlerFunc {

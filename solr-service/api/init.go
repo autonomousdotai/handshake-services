@@ -2,18 +2,18 @@ package api
 
 import (
 	"github.com/autonomousdotai/handshake-services/solr-service/service"
-	"github.com/autonomousdotai/handshake-services/solr-service/setting"
+	"github.com/autonomousdotai/handshake-services/solr-service/configs"
 )
 
 func CreateHandshakeSolrService() (service.SolrService) {
 	sv := service.SolrService{}
-	sv = sv.Init(setting.CurrentConfig().SolrHost, setting.CurrentConfig().SolrPort, setting.CurrentConfig().SolrHandshakeCollection)
+	sv = sv.Init(configs.SolrHost, configs.SolrPort, configs.SolrHandshakeCollection)
 	return sv
 }
 
 func CreateUserSolrService() (service.SolrService) {
 	sv := service.SolrService{}
-	sv = sv.Init(setting.CurrentConfig().SolrHost, setting.CurrentConfig().SolrPort, setting.CurrentConfig().SolrUserCollection)
+	sv = sv.Init(configs.SolrHost, configs.SolrPort, configs.SolrUserCollection)
 	return sv
 }
 
