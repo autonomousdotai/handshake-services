@@ -7,13 +7,13 @@ import (
 
 func CreateHandshakeSolrService() (service.SolrService) {
 	sv := service.SolrService{}
-	sv = sv.Init(configs.SolrHost, configs.SolrPort, configs.SolrHandshakeCollection)
+	sv = sv.Init(configs.SolrHost, configs.SolrPort, configs.SolrCollectionHandshake)
 	return sv
 }
 
 func CreateUserSolrService() (service.SolrService) {
 	sv := service.SolrService{}
-	sv = sv.Init(configs.SolrHost, configs.SolrPort, configs.SolrUserCollection)
+	sv = sv.Init(configs.SolrHost, configs.SolrPort, configs.SolrCollectionUser)
 	return sv
 }
 

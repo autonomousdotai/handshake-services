@@ -8,5 +8,5 @@ import (
 var ServicePort, _ = strconv.Atoi(os.Getenv("SERVICE_PORT"))
 var SolrHost = os.Getenv("SOLR_HOST")
 var SolrPort, _ = strconv.Atoi(os.Getenv("SOLR_PORT"))
-var SolrHandshakeCollection = os.Getenv("SOLR_HANDSHAKE_COLLECTION")
-var SolrUserCollection = os.Getenv("SOLR_USER_COLLECTION")
+var SolrCollectionHandshake = os.Getenv("SOLR_COLLECTION_HANDSHAKE")
+var SolrCollectionUser = os.Getenv("SOLR_COLLECTION_USER")
