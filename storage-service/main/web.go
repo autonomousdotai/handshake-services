@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/autonomousdotai/handshake-services/storage-service/setting"
+	"github.com/autonomousdotai/handshake-services/storage-service/configs"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"google.golang.org/api/option"
@@ -21,7 +21,6 @@ var gsBucket *storage.BucketHandle
 
 func main() {
 
-	configuration := setting.CurrentConfig()
 	// Logger
 	logFile, err := os.OpenFile("logs/autonomous_service.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
@@ -37,13 +36,13 @@ func main() {
 	// Router Index
 
 	if gsBucket == nil {
-		opt := option.WithCredentialsFile(setting.CurrentConfig().GSCredentialsFile)
+		opt := option.WithCredentialsFile(configs.GSCredentialsFile)
 		ctx := gocontext.Background()
 		client, err := storage.NewClient(ctx, opt)
 		if err != nil {
 			panic(err)
 		}
-		bucketName := setting.CurrentConfig().GSBucketName
+		bucketName := configs.GSBucketName
 		gsBucket = client.Bucket(bucketName)
 	}
 
@@ -58,6 +57,12 @@ func main() {
 		})
 		index.POST("/", func(context *gin.Context) {
 			file := context.Query("file")
+			if file == "" {
+				context.JSON(http.StatusOK, gin.H{
+					"status":  -1,
+					"message": "file is invalid",
+				})
+			}
 			buffer, err := ioutil.ReadAll(context.Request.Body)
 			if err != nil {
 				if err != nil {
@@ -103,7 +108,7 @@ func main() {
 			})
 		})
 	}
-	router.Run(fmt.Sprintf(":%d", configuration.ServicePort))
+	router.Run(fmt.Sprintf(":%d", configs.ServicePort))
 }
 
 func Logger() gin.HandlerFunc {
