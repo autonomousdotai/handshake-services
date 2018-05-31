@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/rtt/Go-Solr"
+	"log"
 )
 
 type UserApi struct {
@@ -26,11 +27,13 @@ func (api UserApi) Select(context *gin.Context) {
 	q := new(solr.Query)
 	err := context.Bind(&q)
 	if err != nil {
+		log.Println(err)
 		context.JSON(http.StatusBadRequest, nil)
 		return
 	}
 	result, err := userService.Select(q)
 	if err != nil {
+		log.Println(err)
 		context.JSON(http.StatusInternalServerError, nil)
 		return
 	}
@@ -42,11 +45,13 @@ func (api UserApi) Update(context *gin.Context) {
 	document := new(map[string]interface{})
 	err := context.Bind(&document)
 	if err != nil {
+		log.Println(err)
 		context.JSON(http.StatusBadRequest, nil)
 		return
 	}
 	result, err := userService.Update(*document)
 	if err != nil {
+		log.Println(err)
 		context.JSON(http.StatusInternalServerError, nil)
 		return
 	}
