@@ -32,6 +32,16 @@ func (solrService SolrService) Select(q *solr.Query) (*solr.SelectResponse, erro
 	return res, nil
 }
 
+func (solrService SolrService) SelectRaw(q string) (*solr.SelectResponse, error) {
+	log.Println("solr query string")
+	log.Println(q)
+	res, err := solrService.Connection.SelectRaw(q)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return res, nil
+}
+
 func (solrService SolrService) Update(document map[string]interface{}) (*solr.UpdateResponse, error) {
 	res, err := solrService.Connection.Update(document, true)
 	if err != nil {

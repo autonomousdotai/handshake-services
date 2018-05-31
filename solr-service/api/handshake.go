@@ -15,6 +15,9 @@ func (api HandshakeApi) Init(router *gin.Engine) *gin.RouterGroup {
 		handshakeApi.POST("/select", func(context *gin.Context) {
 			api.Select(context)
 		})
+		handshakeApi.POST("/select-raw", func(context *gin.Context) {
+			api.SelectRaw(context)
+		})
 		handshakeApi.POST("/update", func(context *gin.Context) {
 			api.Update(context)
 		})
@@ -30,6 +33,22 @@ func (api HandshakeApi) Select(context *gin.Context) {
 		return
 	}
 	result, err := handshakeService.Select(q)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, nil)
+		return
+	}
+	context.JSON(http.StatusOK, result)
+	return
+}
+
+func (api HandshakeApi) SelectRaw(context *gin.Context) {
+	q := new(solr.Query)
+	err := context.Bind(&q)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, nil)
+		return
+	}
+	result, err := handshakeService.SelectRaw(q)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, nil)
 		return
