@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/rtt/Go-Solr"
 	"fmt"
+	"log"
 )
 
 type SolrService struct {
@@ -22,6 +23,8 @@ func (solrService SolrService) Init(host string, port int, core string) SolrServ
 }
 
 func (solrService SolrService) Select(q *solr.Query) (*solr.SelectResponse, error) {
+	log.Println("solr query string")
+	log.Println(q.String())
 	res, err := solrService.Connection.Select(q)
 	if err != nil {
 		fmt.Println(err)
