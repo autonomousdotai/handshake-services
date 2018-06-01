@@ -100,3 +100,7 @@ func (commentService CommentService) GetUser(userId int64) (models.User, error) 
 	}
 	return result.Data, err
 }
+
+func (commentService CommentService) GetCommentCount(objectType string, objectId int64, userId int64) (int, error) {
+	return commentDao.GetCommentCount(objectType, objectId, userId)
+}

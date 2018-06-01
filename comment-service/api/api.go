@@ -23,6 +23,9 @@ func (api Api) Init(router *gin.Engine) *gin.Engine {
 	router.POST("/", func(context *gin.Context) {
 		api.CreateComment(context)
 	})
+	router.GET("/count", func(context *gin.Context) {
+		api.GetCommentCount(context)
+	})
 	return router
 }
 
@@ -105,6 +108,19 @@ func (api Api) CreateComment(context *gin.Context) {
 
 func (api Api) GetComments(context *gin.Context) {
 	result := new(response_obj.ResponseObject)
+
+	userId, ok := context.Get("UserId")
+	if !ok {
+		result.SetStatus(bean.NotSignIn)
+		context.JSON(http.StatusOK, result)
+		return
+	}
+	if userId.(int64) <= 0 {
+		result.SetStatus(bean.NotSignIn)
+		context.JSON(http.StatusOK, result)
+		return
+	}
+
 	pageSizeStr := context.Query("page_size")
 	if len(pageSizeStr) == 0 {
 		pageSizeStr = utils.DEFAULT_PAGE_SIZE
@@ -152,6 +168,40 @@ func (api Api) GetComments(context *gin.Context) {
 	data := response_obj.MakePaginationCommentResponse(pagination)
 
 	result.Data = data
+	result.Status = 1
+	result.Message = ""
+	context.JSON(http.StatusOK, result)
+	return
+}
+
+func (api Api) GetCommentCount(context *gin.Context) {
+	result := new(response_obj.ResponseObject)
+
+	userId, ok := context.Get("UserId")
+	if !ok {
+		result.SetStatus(bean.NotSignIn)
+		context.JSON(http.StatusOK, result)
+		return
+	}
+	if userId.(int64) <= 0 {
+		result.SetStatus(bean.NotSignIn)
+		context.JSON(http.StatusOK, result)
+		return
+	}
+
+	objectType := context.Query("object_type")
+	objectId, _ := strconv.ParseInt(context.Query("object_id"), 10, 64)
+	userIdR, _ := strconv.ParseInt(context.Query("user_id"), 10, 64)
+
+	count, err := commentService.GetCommentCount(objectType, objectId, userIdR)
+	if err != nil {
+		result.SetStatus(bean.UnexpectedError)
+		result.Error = err.Error()
+		context.JSON(http.StatusOK, result)
+		return
+	}
+
+	result.Data = count
 	result.Status = 1
 	result.Message = ""
 	context.JSON(http.StatusOK, result)

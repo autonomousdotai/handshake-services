@@ -86,3 +86,16 @@ func (commentDao CommentDao) GetCommentPagination(userId int64, objectType strin
 	pagination.Total = total
 	return pagination, nil
 }
+
+func (commentDao CommentDao) GetCommentCount(objectType string, objectId int64, userId int64) (int, error) {
+	var count int
+	db := models.Database()
+	rows, err := db.Raw("SELECT count(1) FROM comment WHERE object_type = ? AND (? <= 0 OR object_id = ?) AND (? <= 0 OR user_id = ?)", objectType, objectId, objectId, userId, userId).Rows()
+	if err != nil {
+		return count, err
+	}
+	for rows.Next() {
+		rows.Scan(&count)
+	}
+	return count, nil
+}

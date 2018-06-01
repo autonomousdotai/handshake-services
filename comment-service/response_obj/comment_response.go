@@ -58,3 +58,10 @@ func MakeArrayCommentResponse(models []models.Comment) []CommentResponse {
 func MakePaginationCommentResponse(pagination *bean.Pagination) PaginationResponse {
 	return MakePaginationResponse(pagination.Page, pagination.PageSize, pagination.Total, MakeArrayCommentResponse(pagination.Items.([]models.Comment)))
 }
+
+type CountResponse struct {
+	ObjectType string `json:"object_type"`
+	ObjectId   int64  `json:"object_id"`
+	UserId     int64  `json:"user_id"`
+	User       int    `json:"count"`
+}
