@@ -10,7 +10,6 @@ import (
 	"time"
 	"github.com/autonomousdotai/handshake-services/mail-service/configs"
 	"github.com/gin-gonic/gin"
-	"cloud.google.com/go/storage"
 	"io/ioutil"
 	"encoding/base64"
 	"path/filepath"
@@ -19,8 +18,6 @@ import (
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"errors"
 )
-
-var gsBucket *storage.BucketHandle
 
 func main() {
 
