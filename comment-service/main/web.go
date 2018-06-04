@@ -8,9 +8,9 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/autonomousdotai/handshake-services/comment-service/api"
+	"github.com/ninjadotorg/handshake-services/comment-service/api"
 	"github.com/gin-gonic/gin"
-	"github.com/autonomousdotai/handshake-services/comment-service/configs"
+	"github.com/ninjadotorg/handshake-services/comment-service/configs"
 )
 
 func main() {

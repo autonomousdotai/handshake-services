@@ -1,12 +1,12 @@
 package service
 
 import (
-	"github.com/autonomousdotai/handshake-services/comment-service/models"
-	"github.com/autonomousdotai/handshake-services/comment-service/bean"
+	"github.com/ninjadotorg/handshake-services/comment-service/models"
+	"github.com/ninjadotorg/handshake-services/comment-service/bean"
 	"errors"
 	"log"
-	"github.com/autonomousdotai/handshake-services/comment-service/request_obj"
-	"github.com/autonomousdotai/handshake-services/comment-service/configs"
+	"github.com/ninjadotorg/handshake-services/comment-service/request_obj"
+	"github.com/ninjadotorg/handshake-services/comment-service/configs"
 	"mime/multipart"
 	"strings"
 	"fmt"

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"mime/multipart"
 	"log"
-	"github.com/autonomousdotai/handshake-services/comment-service/configs"
+	"github.com/ninjadotorg/handshake-services/comment-service/configs"
 	"encoding/json"
 	"io/ioutil"
 	"errors"

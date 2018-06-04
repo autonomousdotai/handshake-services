@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/autonomousdotai/handshake-services/comment-service/service"
+	"github.com/ninjadotorg/handshake-services/comment-service/service"
 )
 
 // service

@@ -2,13 +2,13 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/autonomousdotai/handshake-services/comment-service/response_obj"
-	"github.com/autonomousdotai/handshake-services/comment-service/request_obj"
+	"github.com/ninjadotorg/handshake-services/comment-service/response_obj"
+	"github.com/ninjadotorg/handshake-services/comment-service/request_obj"
 	"net/http"
-	"github.com/autonomousdotai/handshake-services/comment-service/bean"
+	"github.com/ninjadotorg/handshake-services/comment-service/bean"
 	"log"
 	"strconv"
-	"github.com/autonomousdotai/handshake-services/comment-service/utils"
+	"github.com/ninjadotorg/handshake-services/comment-service/utils"
 	"encoding/json"
 	"strings"
 )
