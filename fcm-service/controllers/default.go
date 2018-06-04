@@ -1,6 +1,7 @@
 package controllers
 
 import (
+    "fmt"
     "net/http"
     "encoding/json"
     "github.com/gin-gonic/gin"
@@ -15,9 +16,14 @@ func (d DefaultController) Home(c *gin.Context) {
 }
 
 func (d DefaultController) Send(c *gin.Context) {
-    data := c.DefaultPostForm("data", "_")
+    var reqData map[string]interface{}
+
+    c.Bind(&reqData)
+    data, ok := reqData["data"]
     
-    if data == "_" {
+    fmt.Println(reqData, data)
+
+    if !ok {
         resp := JsonResponse{0, "Invalid data", nil}
         c.JSON(http.StatusOK, resp)
         c.Abort()
@@ -28,7 +34,7 @@ func (d DefaultController) Send(c *gin.Context) {
     var message string
     var jsonData map[string]interface{}
 
-    json.Unmarshal([]byte(data), &jsonData)
+    json.Unmarshal([]byte(data.(string)), &jsonData)
 
     result, err := fcmService.Send(jsonData)
  
