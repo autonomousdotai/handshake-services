@@ -8,8 +8,8 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/autonomousdotai/handshake-services/solr-service/api"
-	"github.com/autonomousdotai/handshake-services/solr-service/configs"
+	"github.com/ninjadotorg/handshake-services/solr-service/api"
+	"github.com/ninjadotorg/handshake-services/solr-service/configs"
 	"github.com/gin-gonic/gin"
 )
 

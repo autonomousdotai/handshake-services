@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/autonomousdotai/handshake-services/solr-service/service"
-	"github.com/autonomousdotai/handshake-services/solr-service/configs"
+	"github.com/ninjadotorg/handshake-services/solr-service/service"
+	"github.com/ninjadotorg/handshake-services/solr-service/configs"
 )
 
 func CreateHandshakeSolrService() (service.SolrService) {
