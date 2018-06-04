@@ -3,7 +3,6 @@ package controllers
 import (
     "fmt"
     "net/http"
-    "encoding/json"
     "github.com/gin-gonic/gin"
 )
 
@@ -33,7 +32,7 @@ func (d DefaultController) Send(c *gin.Context) {
     var status int
     var message string
 
-    result, err := fcmService.Send(data)
+    result, err := fcmService.Send(data.(map[string]interface{}))
  
     if result {
         status = 1
