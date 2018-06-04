@@ -1,17 +1,9 @@
 package server
 
 import (
-    "fmt"
-    "net/http"
-    "net/http/httputil"
-    "net/url"
-    "time"
-    "log"
-    "strconv"
     "github.com/gin-gonic/gin"
 
-    "github.com/ninjadotorg/handshake-services/ipfs-service/controllers"
-    "github.com/ninjadotorg/handshake-services/ipfs-service/config"
+    "github.com/ninjadotorg/handshake-services/fcm-service/controllers"
 )
 
 func NewRouter() *gin.Engine {
@@ -21,7 +13,7 @@ func NewRouter() *gin.Engine {
 
     defaultController := new(controllers.DefaultController)
     router.GET("/", defaultController.Home) 
-
+    router.POST("/send", defaultController.Send)
     router.NoRoute(defaultController.NotFound)
 
     return router

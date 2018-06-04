@@ -2,6 +2,7 @@ package controllers
 
 import (
     "net/http"
+    "encoding/json"
     "github.com/gin-gonic/gin"
 )
 
@@ -13,14 +14,34 @@ func (d DefaultController) Home(c *gin.Context) {
     c.JSON(http.StatusOK, resp)
 }
 
-func (d DefaultController) Upload(c *gin.Context) {
+func (d DefaultController) Send(c *gin.Context) {
+    data := c.DefaultPostForm("data", "_")
+    
+    if data == "_" {
+        resp := JsonResponse{0, "Invalid data", nil}
+        c.JSON(http.StatusOK, resp)
+        c.Abort()
+        return;
+    }
 
-    resp := JsonResponse{0, "Upload", nil}
-    c.JSON(http.StatusOK, resp)
-}
+    var status int
+    var message string
+    var jsonData map[string]interface{}
 
-func (d DefaultController) View(c *gin.Context) {
-    resp := JsonResponse{0, "View", nil}
+    json.Unmarshal([]byte(data), &jsonData)
+
+    result, err := fcmService.Send(jsonData)
+ 
+    if result {
+        status = 1
+    } else {
+        status = 0
+        if err != nil {
+            message = err.Error()
+        }
+    }
+
+    resp := JsonResponse{status, message, nil}
     c.JSON(http.StatusOK, resp)
 }
 

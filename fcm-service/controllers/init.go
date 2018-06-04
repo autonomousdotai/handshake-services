@@ -1,7 +1,7 @@
 package controllers
 
 import (
-    "github.com/ninjadotorg/handshake-services/ipfs-service/services"
+    "github.com/ninjadotorg/handshake-services/fcm-service/services"
 )
 
-var ipfsService = new(services.IpfsService)
+var fcmService = new(services.FCMService)

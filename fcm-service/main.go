@@ -2,8 +2,8 @@ package main
 
 import (
     _ "fmt"
-    "github.com/ninjadotorg/handshake-services/ipfs-service/config"
-    "github.com/ninjadotorg/handshake-services/ipfs-service/server"
+    "github.com/ninjadotorg/handshake-services/fcm-service/config"
+    "github.com/ninjadotorg/handshake-services/fcm-service/server"
 )
 
 func main() {

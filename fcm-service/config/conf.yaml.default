@@ -1,2 +1,2 @@
-secret_key: abcd1234abcd1234abcd1234abcd1234
-ipfs_endpoint: http://localhost:5001
+gcm_endpoint: https://fcm.googleapis.com/fcm/send
+gcm_server_key: google cloud message server key
