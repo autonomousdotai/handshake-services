@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/autonomousdotai/handshake-services/mail-service/configs"
+	"github.com/ninjadotorg/handshake-services/mail-service/configs"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"encoding/base64"
