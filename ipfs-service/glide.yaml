@@ -1,0 +1,4 @@
+package: github.com/autonomousdotai/handshake-services/ipfs-service
+import:
+- package: github.com/gin-gonic/gin
+  version: v1.2
