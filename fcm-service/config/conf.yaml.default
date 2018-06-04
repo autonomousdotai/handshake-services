@@ -1,0 +1,2 @@
+secret_key: abcd1234abcd1234abcd1234abcd1234
+ipfs_endpoint: http://localhost:5001

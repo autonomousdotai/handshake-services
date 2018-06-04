@@ -12,8 +12,8 @@ solr-service/logs
 solr-service/setting/*.json
 solr-service/vendor
 fcm-service/logs
-fcm-service/setting/*.json
+fcm-service/config/*.yaml
 fcm-service/vendor
 ipfs-service/logs
-ipfs-service/setting/*.json
+ipfs-service/config/*.yaml
 ipfs-service/vendor
