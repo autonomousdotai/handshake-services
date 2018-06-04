@@ -20,8 +20,6 @@ func (d DefaultController) Send(c *gin.Context) {
     c.Bind(&jsonData)
     data, ok := jsonData["data"]
     
-    fmt.Println(jsonData, data)
-
     if !ok {
         resp := JsonResponse{0, "Invalid data", nil}
         c.JSON(http.StatusOK, resp)
