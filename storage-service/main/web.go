@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/autonomousdotai/handshake-services/storage-service/configs"
+	"github.com/ninjadotorg/handshake-services/storage-service/configs"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"google.golang.org/api/option"
