@@ -1,7 +1,9 @@
 package services
 
 import (
+    "io"
     "fmt"
+    "errors"
     "bytes"
     "encoding/json"
     "io/ioutil"
@@ -19,19 +21,35 @@ func (s IPFSService) Upload(source *multipart.FileHeader) (string, error) {
     file, fileErr := source.Open()
     if fileErr != nil {
         fmt.Println("Read file error: ", fileErr)
-        return false, fileErr
+        return "", fileErr
     }
-
     defer file.Close()
 
-    fb, err := ioutil.ReadAll(file)
-    if err != nil {
-        fmt.Println("Read file error: ", err)
-        return "", err
+    body := &bytes.Buffer{}
+    writer := multipart.NewWriter(body)
+    part, partErr := writer.CreateFormFile("path", source.Filename)
+
+    if partErr != nil {
+        return "", partErr
     }
 
-    request, _ := http.NewRequest("POST", endpoint, bytes.NewBuffer(fb))
-  
+    _, copyErr := io.Copy(part, file)
+
+    if copyErr != nil {
+        return "", copyErr
+    }
+
+    writerErr := writer.Close()
+    
+    if writerErr != nil {
+        return "", writerErr
+    }
+
+    endpoint = fmt.Sprintf("%s/api/v0/add", endpoint)
+
+    request, _ := http.NewRequest("POST", endpoint, body)
+    request.Header.Add("Content-Type", writer.FormDataContentType())
+
     client := &http.Client{}
     response, err := client.Do(request)
 
@@ -40,17 +58,49 @@ func (s IPFSService) Upload(source *multipart.FileHeader) (string, error) {
     }
 
     b, _ := ioutil.ReadAll(response.Body)
-    
+   
+    fmt.Println(string(b))
+
     var data map[string]interface{}
     json.Unmarshal(b, &data)
 
-    result, ok := data["status"]
-    hash, _ := data["data"] 
-    message, _ := data["message"]
+    fmt.Println(data)
 
-    if ok && (float64(1) == result) {
-        return hash, nil
+    hash, ok := data["Hash"] 
+
+    if ok {
+        return hash.(string), nil
     } else {
-        return "", message
+        return "", errors.New("Upload fail.")
     }
+}
+
+func (s IPFSService) View(hash string) ([]byte, error) { 
+    conf := config.GetConfig() 
+    endpoint := conf.GetString("ipfs_endpoint")
+
+    endpoint = fmt.Sprintf("%s/api/v0/cat?arg=%s", endpoint, hash)
+
+    request, _ := http.NewRequest("GET", endpoint, nil)
+
+    client := &http.Client{}
+    response, err := client.Do(request)
+
+    if err != nil {
+        return nil, err
+    }
+
+    defer response.Body.Close()
+    if response.StatusCode != http.StatusOK {
+        return nil, errors.New(response.Status)
+    }
+
+    var data bytes.Buffer 
+    _, readErr := io.Copy(&data, response.Body)
+
+    if readErr != nil {
+        return nil, readErr
+    }
+
+    return data.Bytes(), nil
 }
