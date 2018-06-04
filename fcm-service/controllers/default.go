@@ -16,12 +16,12 @@ func (d DefaultController) Home(c *gin.Context) {
 }
 
 func (d DefaultController) Send(c *gin.Context) {
-    var reqData map[string]interface{}
+    var jsonData map[string]interface{}
 
-    c.Bind(&reqData)
-    data, ok := reqData["data"]
+    c.Bind(&jsonData)
+    data, ok := jsonData["data"]
     
-    fmt.Println(reqData, data)
+    fmt.Println(jsonData, data)
 
     if !ok {
         resp := JsonResponse{0, "Invalid data", nil}
@@ -32,11 +32,8 @@ func (d DefaultController) Send(c *gin.Context) {
 
     var status int
     var message string
-    var jsonData map[string]interface{}
 
-    json.Unmarshal([]byte(data.(string)), &jsonData)
-
-    result, err := fcmService.Send(jsonData)
+    result, err := fcmService.Send(data)
  
     if result {
         status = 1
