@@ -66,7 +66,13 @@ func (commentDao CommentDao) GetCommentPagination(userId int64, objectType strin
 		db = db.Limit(pagination.PageSize)
 		db = db.Offset(pagination.PageSize * (pagination.Page - 1))
 	}
-	db = db.Where("object_type = ? AND object_id = ?", objectType, objectId)
+	if objectType != "" {
+		db = db.Where("object_type = ?", objectType)
+	}
+	if objectId > 0 {
+		db = db.Where("object_id = ?", objectId)
+	}
+
 	err := db.Order("date_created desc").Find(&dtos).Error
 	if err != nil {
 		log.Print(err)
