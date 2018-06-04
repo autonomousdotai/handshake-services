@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/autonomousdotai/handshake-services/comment-service/configs"
+	"github.com/ninjadotorg/handshake-services/comment-service/configs"
 )
 
 func CdnUrlFor(fileUrl string) string {

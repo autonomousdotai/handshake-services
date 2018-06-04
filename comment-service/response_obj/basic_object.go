@@ -1,6 +1,6 @@
 package response_obj
 
-import "github.com/autonomousdotai/handshake-services/comment-service/bean"
+import "github.com/ninjadotorg/handshake-services/comment-service/bean"
 
 type ResponseObject struct {
 	Status  int         `json:"status"`
