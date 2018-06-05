@@ -59,7 +59,7 @@ func (commentDao CommentDao) Delete(dto models.Comment, tx *gorm.DB) (models.Com
 	return dto, nil
 }
 
-func (commentDao CommentDao) GetCommentPagination(userId int64, objectType string, objectId int64, pagination *bean.Pagination) (*bean.Pagination, error) {
+func (commentDao CommentDao) GetCommentPagination(userId int64, objectType string, objectId string, pagination *bean.Pagination) (*bean.Pagination, error) {
 	dtos := []models.Comment{}
 	db := models.Database()
 	if pagination != nil {
@@ -69,7 +69,7 @@ func (commentDao CommentDao) GetCommentPagination(userId int64, objectType strin
 	if objectType != "" {
 		db = db.Where("object_type = ?", objectType)
 	}
-	if objectId > 0 {
+	if objectId != "" {
 		db = db.Where("object_id = ?", objectId)
 	}
 
