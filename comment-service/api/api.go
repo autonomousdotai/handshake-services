@@ -111,13 +111,12 @@ func (api Api) GetComments(context *gin.Context) {
 		context.JSON(http.StatusOK, result)
 		return
 	}
-	objectType := context.Query("object_type")
 	objectId := context.Query("object_id")
 
 	var pagination *bean.Pagination
 	pagination = &bean.Pagination{PageSize: pageSize, Page: page}
 
-	pagination, err = commentService.GetCommentPagination(0, objectType, objectId, pagination)
+	pagination, err = commentService.GetCommentPagination(0, objectId, pagination)
 	if err != nil {
 		result.SetStatus(bean.UnexpectedError)
 		result.Error = err.Error()
@@ -149,11 +148,9 @@ func (api Api) GetCommentCount(context *gin.Context) {
 		return
 	}
 
-	objectType := context.Query("object_type")
-	objectId, _ := strconv.ParseInt(context.Query("object_id"), 10, 64)
-	userIdR, _ := strconv.ParseInt(context.Query("user_id"), 10, 64)
+	objectId := context.Query("object_id")
 
-	count, err := commentService.GetCommentCount(objectType, objectId, userIdR)
+	count, err := commentService.CountCommentByObjectId(objectId)
 	if err != nil {
 		result.SetStatus(bean.UnexpectedError)
 		result.Error = err.Error()

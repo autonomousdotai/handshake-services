@@ -13,6 +13,8 @@ import (
 	"time"
 	"net/http"
 	"encoding/json"
+	"bytes"
+	"github.com/rtt/Go-Solr"
 )
 
 type CommentService struct {
@@ -63,11 +65,13 @@ func (commentService CommentService) CreateComment(userId int64, request request
 
 	tx.Commit()
 
+	commentService.IndexFeed(comment.ID)
+
 	return comment, nil
 }
 
-func (commentService CommentService) GetCommentPagination(userId int64, objectType string, objectId string, pagination *bean.Pagination) (*bean.Pagination, error) {
-	pagination, err := commentDao.GetCommentPagination(userId, objectType, objectId, pagination)
+func (commentService CommentService) GetCommentPagination(userId int64, objectId string, pagination *bean.Pagination) (*bean.Pagination, error) {
+	pagination, err := commentDao.GetCommentPagination(userId, objectId, pagination)
 	comments := pagination.Items.([]models.Comment)
 	items := []models.Comment{}
 	for _, comment := range comments {
@@ -101,6 +105,49 @@ func (commentService CommentService) GetUser(userId int64) (models.User, error) 
 	return result.Data, err
 }
 
-func (commentService CommentService) GetCommentCount(objectType string, objectId int64, userId int64) (int, error) {
-	return commentDao.GetCommentCount(objectType, objectId, userId)
+func (commentService CommentService) CountCommentByObjectId(objectId string) (int, error) {
+	return commentDao.CountByObjectId(objectId)
+}
+
+func (commentService CommentService) IndexFeed(commentId int64) (error) {
+	comment := commentDao.GetById(commentId)
+	if comment.ID <= 0 {
+		return errors.New("comment id is invalid")
+	}
+
+	count, _ := commentDao.CountByObjectId(comment.ObjectId)
+	document := map[string]interface{}{
+		"add": [] interface{}{
+			map[string]interface{}{
+				"id": comment.ObjectId,
+				"comment_count_i": map[string]int{
+					"set": count,
+				},
+			},
+		},
+	}
+
+	jsonStr, err := json.Marshal(document)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest("POST", configs.SolrServiceUrl+"/handshake/update", bytes.NewBuffer(jsonStr))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	bodyBytes, err := netUtil.CurlRequest(req)
+	if err != nil {
+		return err
+	}
+	result := solr.UpdateResponse{}
+	err = json.Unmarshal(bodyBytes, &result)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if result.Success == false {
+		return errors.New("update solr result false")
+	}
+	return nil
 }
