@@ -28,6 +28,7 @@ func (commentService CommentService) CreateComment(userId int64, request request
 	comment.UserId = userId
 	comment.ObjectId = request.ObjectId
 	comment.Comment = request.Comment
+	comment.Address = request.Address
 	comment.Status = 1
 
 	comment, err := commentDao.Create(comment, tx)

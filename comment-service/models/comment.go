@@ -15,6 +15,7 @@ type Comment struct {
 	ObjectId     string
 	Comment      string
 	Image        string
+	Address      string
 	Status       int
 	User         User
 }

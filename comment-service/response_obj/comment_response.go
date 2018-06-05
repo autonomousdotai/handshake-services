@@ -22,6 +22,7 @@ type CommentResponse struct {
 	ObjectId    string       `json:"object_id"`
 	Comment     string       `json:"comment"`
 	Image       string       `json:"image"`
+	Address     string       `json:"address"`
 	Status      int          `json:"status"`
 	User        UserResponse `json:"user"`
 }
