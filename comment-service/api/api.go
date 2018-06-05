@@ -55,13 +55,6 @@ func (api Api) CreateComment(context *gin.Context) {
 		return
 	}
 	sourceFile, sourceFileHeader, err := context.Request.FormFile("image")
-	if err != nil {
-		log.Print(err)
-		result.SetStatus(bean.UnexpectedError)
-		result.Error = err.Error()
-		context.JSON(http.StatusOK, result)
-		return
-	}
 	comment, appErr := commentService.CreateComment(userId.(int64), *request, &sourceFile, sourceFileHeader)
 	if appErr != nil {
 		log.Print(appErr.OrgError)
