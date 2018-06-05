@@ -12,7 +12,6 @@ type Comment struct {
 	DateModified time.Time
 	ID           int64
 	UserId       int64
-	ObjectType   string
 	ObjectId     string
 	Comment      string
 	Image        string

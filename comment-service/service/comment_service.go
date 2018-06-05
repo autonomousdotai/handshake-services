@@ -26,7 +26,6 @@ func (commentService CommentService) CreateComment(userId int64, request request
 	comment := models.Comment{}
 
 	comment.UserId = userId
-	comment.ObjectType = request.ObjectType
 	comment.ObjectId = request.ObjectId
 	comment.Comment = request.Comment
 	comment.Status = 1

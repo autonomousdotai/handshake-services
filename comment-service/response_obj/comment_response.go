@@ -19,6 +19,7 @@ type CommentResponse struct {
 	DateCreated time.Time    `json:"date_created"`
 	ID          int64        `json:"id"`
 	UserId      int64        `json:"user_id"`
+	ObjectId    string       `json:"object_id"`
 	Comment     string       `json:"comment"`
 	Image       string       `json:"image"`
 	Status      int          `json:"status"`
@@ -29,6 +30,7 @@ func MakeCommentResponse(model models.Comment) CommentResponse {
 	result := CommentResponse{}
 	result.ID = model.ID
 	result.UserId = model.UserId
+	result.ObjectId = model.ObjectId
 	result.Comment = model.Comment
 	result.Image = utils.CdnUrlFor(model.Image)
 	result.Status = model.Status
