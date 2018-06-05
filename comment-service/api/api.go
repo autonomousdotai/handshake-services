@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"github.com/ninjadotorg/handshake-services/comment-service/utils"
 	"encoding/json"
-	"strings"
 )
 
 type Api struct {
@@ -46,64 +45,38 @@ func (api Api) CreateComment(context *gin.Context) {
 
 	request := new(request_obj.CommentRequest)
 
-	if strings.ToLower(context.GetHeader("Content-Type")) == "application/json" {
-		err := context.Bind(&request)
-		if err != nil {
-			log.Print(err)
-			result.SetStatus(bean.UnexpectedError)
-			result.Error = err.Error()
-			context.JSON(http.StatusOK, result)
-			return
-		}
-		comment, appErr := commentService.CreateComment(userId.(int64), *request, nil, nil)
-		if appErr != nil {
-			log.Print(appErr.OrgError)
-			result.SetStatus(bean.UnexpectedError)
-			result.Error = appErr.OrgError.Error()
-			context.JSON(http.StatusOK, result)
-			return
-		}
-		data := response_obj.MakeCommentResponse(comment)
-
-		result.Data = data
-		result.Status = 1
-		result.Message = ""
-		context.JSON(http.StatusOK, result)
-		return
-	} else {
-		requestJson := context.Request.PostFormValue("request")
-		err := json.Unmarshal([]byte(requestJson), &request)
-		if err != nil {
-			log.Print(err)
-			result.SetStatus(bean.UnexpectedError)
-			result.Error = err.Error()
-			context.JSON(http.StatusOK, result)
-			return
-		}
-		sourceFile, sourceFileHeader, err := context.Request.FormFile("image")
-		if err != nil {
-			log.Print(err)
-			result.SetStatus(bean.UnexpectedError)
-			result.Error = err.Error()
-			context.JSON(http.StatusOK, result)
-			return
-		}
-		comment, appErr := commentService.CreateComment(userId.(int64), *request, &sourceFile, sourceFileHeader)
-		if appErr != nil {
-			log.Print(appErr.OrgError)
-			result.SetStatus(bean.UnexpectedError)
-			result.Error = appErr.OrgError.Error()
-			context.JSON(http.StatusOK, result)
-			return
-		}
-		data := response_obj.MakeCommentResponse(comment)
-
-		result.Data = data
-		result.Status = 1
-		result.Message = ""
+	requestJson := context.Request.PostFormValue("request")
+	err := json.Unmarshal([]byte(requestJson), &request)
+	if err != nil {
+		log.Print(err)
+		result.SetStatus(bean.UnexpectedError)
+		result.Error = err.Error()
 		context.JSON(http.StatusOK, result)
 		return
 	}
+	sourceFile, sourceFileHeader, err := context.Request.FormFile("image")
+	if err != nil {
+		log.Print(err)
+		result.SetStatus(bean.UnexpectedError)
+		result.Error = err.Error()
+		context.JSON(http.StatusOK, result)
+		return
+	}
+	comment, appErr := commentService.CreateComment(userId.(int64), *request, &sourceFile, sourceFileHeader)
+	if appErr != nil {
+		log.Print(appErr.OrgError)
+		result.SetStatus(bean.UnexpectedError)
+		result.Error = appErr.OrgError.Error()
+		context.JSON(http.StatusOK, result)
+		return
+	}
+	data := response_obj.MakeCommentResponse(comment)
+
+	result.Data = data
+	result.Status = 1
+	result.Message = ""
+	context.JSON(http.StatusOK, result)
+	return
 }
 
 func (api Api) GetComments(context *gin.Context) {
