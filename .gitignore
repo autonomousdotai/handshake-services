@@ -12,6 +12,14 @@ algoia-service/vendor
 solr-service/logs
 solr-service/setting/*.json
 solr-service/vendor
+storage-service/logs
+storage-service/setting/*.json
+storage-service/configs/*.json
+mail-service/vendor
+mail-service/logs
+mail-service/configs/*.json
+storage-service/vendor
+
 fcm-service/logs
 fcm-service/config/*.yaml
 fcm-service/vendor

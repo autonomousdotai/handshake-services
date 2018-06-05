@@ -13,7 +13,7 @@ type Comment struct {
 	ID           int64
 	UserId       int64
 	ObjectType   string
-	ObjectId     int64
+	ObjectId     string
 	Comment      string
 	Image        string
 	Status       int
