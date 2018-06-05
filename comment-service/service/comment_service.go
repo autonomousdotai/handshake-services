@@ -66,7 +66,7 @@ func (commentService CommentService) CreateComment(userId int64, request request
 	return comment, nil
 }
 
-func (commentService CommentService) GetCommentPagination(userId int64, objectType string, objectId int64, pagination *bean.Pagination) (*bean.Pagination, error) {
+func (commentService CommentService) GetCommentPagination(userId int64, objectType string, objectId string, pagination *bean.Pagination) (*bean.Pagination, error) {
 	pagination, err := commentDao.GetCommentPagination(userId, objectType, objectId, pagination)
 	comments := pagination.Items.([]models.Comment)
 	items := []models.Comment{}

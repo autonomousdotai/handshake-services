@@ -146,14 +146,8 @@ func (api Api) GetComments(context *gin.Context) {
 		return
 	}
 	objectType := context.Query("object_type")
-	objectId, err := strconv.ParseInt(context.Query("object_id"), 10, 64)
-	if err != nil {
-		log.Print(err)
-		result.SetStatus(bean.UnexpectedError)
-		result.Error = err.Error()
-		context.JSON(http.StatusOK, result)
-		return
-	}
+	objectId := context.Query("object_id")
+
 	var pagination *bean.Pagination
 	pagination = &bean.Pagination{PageSize: pageSize, Page: page}
 
