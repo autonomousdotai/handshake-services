@@ -1,4 +1,4 @@
-package: github.com/ninjadotorg/handshake-services/ipfs-service
+package: github.com/ninjadotorg/handshake-services/fcm-service
 import:
 - package: github.com/gin-gonic/gin
   version: v1.2
