@@ -2,6 +2,7 @@
 */.idea
 */node_modules
 */*.lock
+*swp
 comment-service/logs
 comment-service/setting/*.json
 comment-service/vendor
@@ -19,3 +20,9 @@ mail-service/logs
 mail-service/configs/*.json
 storage-service/vendor
 
+fcm-service/logs
+fcm-service/config/*.yaml
+fcm-service/vendor
+ipfs-service/logs
+ipfs-service/config/*.yaml
+ipfs-service/vendor
