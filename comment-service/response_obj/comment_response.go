@@ -36,6 +36,7 @@ func MakeCommentResponse(model models.Comment) CommentResponse {
 	result.Image = utils.CdnUrlFor(model.Image)
 	result.Status = model.Status
 	result.DateCreated = model.DateCreated
+	result.Address = model.Address
 	result.User = MakeUserResponse(model.User)
 	return result
 }
