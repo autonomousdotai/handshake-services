@@ -1,19 +1,20 @@
 package service
 
 import (
-	"github.com/ninjadotorg/handshake-services/comment-service/models"
-	"github.com/ninjadotorg/handshake-services/comment-service/bean"
-	"errors"
-	"log"
-	"github.com/ninjadotorg/handshake-services/comment-service/request_obj"
-	"github.com/ninjadotorg/handshake-services/comment-service/configs"
-	"mime/multipart"
-	"strings"
-	"fmt"
-	"time"
-	"net/http"
-	"encoding/json"
 	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"log"
+	"mime/multipart"
+	"net/http"
+	"strings"
+	"time"
+
+	"github.com/ninjadotorg/handshake-services/comment-service/bean"
+	"github.com/ninjadotorg/handshake-services/comment-service/configs"
+	"github.com/ninjadotorg/handshake-services/comment-service/models"
+	"github.com/ninjadotorg/handshake-services/comment-service/request_obj"
 	"github.com/rtt/Go-Solr"
 )
 
@@ -65,7 +66,7 @@ func (commentService CommentService) CreateComment(userId int64, request request
 
 	tx.Commit()
 
-	commentService.IndexFeed(comment.ID)
+	// commentService.IndexFeed(comment.ID)
 
 	return comment, nil
 }
@@ -109,7 +110,7 @@ func (commentService CommentService) CountCommentByObjectId(objectId string) (in
 	return commentDao.CountByObjectId(objectId)
 }
 
-func (commentService CommentService) IndexFeed(commentId int64) (error) {
+func (commentService CommentService) IndexFeed(commentId int64) error {
 	comment := commentDao.GetById(commentId)
 	if comment.ID <= 0 {
 		return errors.New("comment id is invalid")
@@ -117,7 +118,7 @@ func (commentService CommentService) IndexFeed(commentId int64) (error) {
 
 	count, _ := commentDao.CountByObjectId(comment.ObjectId)
 	document := map[string]interface{}{
-		"add": [] interface{}{
+		"add": []interface{}{
 			map[string]interface{}{
 				"id": comment.ObjectId,
 				"comment_count_i": map[string]int{

@@ -1,17 +1,18 @@
 package dao
 
 import (
-	"github.com/ninjadotorg/handshake-services/comment-service/models"
 	"log"
-	"github.com/jinzhu/gorm"
 	"time"
+
+	"github.com/jinzhu/gorm"
 	"github.com/ninjadotorg/handshake-services/comment-service/bean"
+	"github.com/ninjadotorg/handshake-services/comment-service/models"
 )
 
 type CommentDao struct {
 }
 
-func (commentDao CommentDao) GetById(id int64) (models.Comment) {
+func (commentDao CommentDao) GetById(id int64) models.Comment {
 	dto := models.Comment{}
 	err := models.Database().Where("id = ?", id).First(&dto).Error
 	if err != nil {
