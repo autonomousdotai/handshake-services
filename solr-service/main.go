@@ -8,9 +8,10 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
 	"github.com/ninjadotorg/handshake-services/solr-service/api"
 	"github.com/ninjadotorg/handshake-services/solr-service/configs"
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -33,7 +34,7 @@ func main() {
 		index.GET("/", func(context *gin.Context) {
 			result := map[string]interface{}{
 				"status":  1,
-				"message": "Algolia Service API",
+				"message": "Solr Service API",
 			}
 			context.JSON(http.StatusOK, result)
 		})
