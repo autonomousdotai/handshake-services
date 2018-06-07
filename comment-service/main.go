@@ -8,8 +8,9 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/ninjadotorg/handshake-services/comment-service/api"
+
 	"github.com/gin-gonic/gin"
+	"github.com/ninjadotorg/handshake-services/comment-service/api"
 	"github.com/ninjadotorg/handshake-services/comment-service/configs"
 )
 
@@ -58,6 +59,11 @@ func Logger() gin.HandlerFunc {
 func AuthorizeMiddleware() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		userId, _ := strconv.ParseInt(context.GetHeader("Uid"), 10, 64)
+		if userId <= 0 {
+			context.JSON(http.StatusOK, gin.H{"status": 0, "message": "user is not logged in"})
+			context.Abort()
+			return
+		}
 		context.Set("UserId", userId)
 		context.Next()
 	}
