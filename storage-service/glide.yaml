@@ -1,0 +1,5 @@
+package: github.com/ninjadotorg/handshake-services/storage-service
+import:
+- package: github.com/gin-gonic/gin
+  version: v1.2
+- package: cloud.google.com/go/storage

@@ -1,0 +1,6 @@
+package: github.com/ninjadotorg/handshake-services/mail-service
+import:
+- package: github.com/gin-gonic/gin
+  version: v1.2
+- package: github.com/sendgrid/sendgrid-go
+  version: v3.4.1
