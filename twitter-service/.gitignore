@@ -1,0 +1,8 @@
+# mac fucking
+.DS_Store
+# vscode editor
+.vscode
+
+# event ignore
+node_modules
+configs/config-local.js
