@@ -32,7 +32,7 @@ router.get('/:username?', function(req, res) {
 		try {
 			let arr = readFile('follows.txt');
 			console.log(arr);
-			let index = arr.indexOf(req.params.username);
+			let index = arr.indexOf(req.params.username.toLowerCase());
 		  	if (index > -1) {
 				res.json(utils.responseSuccess(true));
 			}
@@ -75,8 +75,14 @@ function saveFile(fileName, data) {
 }
 
 function readFile(fileName) {
-  let filePath =  path.resolve(__dirname,  fileName);
-  return fs.readFileSync(filePath);
+	let filePath =  path.resolve(__dirname,  fileName);
+	let str = fs.readFileSync(filePath).toString();
+	if(str){
+		return str.split("'");
+	}
+	else{
+		return [];
+	}
 }
 
 app.use('/', router);
