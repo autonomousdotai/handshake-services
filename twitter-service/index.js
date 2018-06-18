@@ -4,6 +4,8 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const Twit = require('twit');
 const utils = require('./utils');
+var path = require('path');
+var fs = require('fs');
 
 const T = new Twit({
 	consumer_key:         configs.consumer_key,
