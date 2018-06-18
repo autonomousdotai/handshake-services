@@ -78,7 +78,7 @@ function readFile(fileName) {
 	let filePath =  path.resolve(__dirname,  fileName);
 	let str = fs.readFileSync(filePath).toString();
 	if(str){
-		return str.split("'");
+		return str.split(",");
 	}
 	else{
 		return [];
