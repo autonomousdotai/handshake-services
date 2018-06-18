@@ -28,20 +28,30 @@ router.get('/', function(req, res) {
 router.get('/:username?', function(req, res) {
 	if (req.params.username) {
 		try {
-			T.get('followers/list', { screen_name: 'ninja_org', count: '10', cursor: -1 },  function (err, data, response) {
-				let result = false;
-				if (data && data.users && data.users.length > 0) {
-					console.log(data.users.length);
-					for (let u of data.users) {
-						if(u.screen_name == req.params.username){
-							result = true
-							console.log('found', u);
-							break;
+			let arr = readFile('follows.txt');
+			console.log(arr);
+			let index = arr.indexOf(req.params.username);
+		  	if (index > -1) {
+				res.json({result:true});
+			}
+			else{
+				T.get('followers/list', { screen_name: 'ninja_org', count: '10', cursor: -1 },  function (err, data, response) {
+					let result = false;
+					if (data && data.users && data.users.length > 0) {
+						console.log(data.users.length);
+						for (let u of data.users) {
+							if(u.screen_name == req.params.username){
+								result = true;
+								arr.push(u.screen_name);
+								saveFile("follows.txt", arr);
+								console.log('found', u);
+								break;
+							}
 						}
 					}
-				}
-				res.json(utils.responseSuccess(result));
-			})	
+					res.json(utils.responseSuccess(result));
+				})
+			}	
 		} catch (e) {
 			console.log('Error: ', e.message);
 			res.json(utils.responseError('Error occured, please try again'));
@@ -51,6 +61,21 @@ router.get('/:username?', function(req, res) {
 		res.json(utils.responseError('Invalid params'));
 	}
 });
+
+function saveFile(fileName, data) {
+  let filePath =  path.resolve(__dirname, fileName);
+		
+		fs.writeFileSync(filePath, data, {flag: 'w'}, function(err) {
+			if(err) {
+				console.log(err);
+			}
+		});
+}
+
+function readFile(fileName) {
+  let filePath =  path.resolve(__dirname,  fileName);
+  return fs.readFileSync(filePath);
+}
 
 app.use('/', router);
 
