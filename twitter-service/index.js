@@ -34,7 +34,7 @@ router.get('/:username?', function(req, res) {
 			console.log(arr);
 			let index = arr.indexOf(req.params.username);
 		  	if (index > -1) {
-				res.json({result:true});
+				res.json(utils.responseSuccess(true));
 			}
 			else{
 				T.get('followers/list', { screen_name: 'ninja_org', count: '10', cursor: -1 },  function (err, data, response) {
