@@ -1,20 +1,21 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
-	"github.com/ninjadotorg/handshake-services/storage-service/configs"
-	"github.com/gin-gonic/gin"
-	"io/ioutil"
-	"google.golang.org/api/option"
+
 	"cloud.google.com/go/storage"
+	"github.com/gin-gonic/gin"
+	"github.com/ninjadotorg/handshake-services/storage-service/configs"
 	gocontext "golang.org/x/net/context"
-	"bytes"
+	"google.golang.org/api/option"
 )
 
 var gsBucket *storage.BucketHandle
@@ -107,6 +108,69 @@ func main() {
 				"message": "OK",
 			})
 		})
+
+		index.POST("/user/upload", func(context *gin.Context) {
+			userID, _ := strconv.ParseInt(context.GetHeader("Uid"), 10, 64)
+			if userID <= 0 {
+				context.JSON(http.StatusOK, gin.H{"status": 0, "message": "User is not authorized"})
+				context.Abort()
+				return
+			}
+
+			file := context.Query("file")
+			if file == "" {
+				context.JSON(http.StatusOK, gin.H{
+					"status":  -1,
+					"message": "file is invalid",
+				})
+			}
+			file = fmt.Sprintf("user_%d/%s", userID, file)
+			buffer, err := ioutil.ReadAll(context.Request.Body)
+			if err != nil {
+				if err != nil {
+					log.Print(err)
+					context.JSON(http.StatusOK, gin.H{
+						"status":  -1,
+						"message": err.Error(),
+					})
+				}
+			}
+
+			if err != nil {
+				log.Print(err)
+				context.JSON(http.StatusOK, gin.H{
+					"status":  -1,
+					"message": err.Error(),
+				})
+			}
+			fileBytes := bytes.NewReader(buffer)
+			fileType := http.DetectContentType(buffer)
+			ctx := gocontext.Background()
+			w := gsBucket.Object(file).NewWriter(ctx)
+			w.ACL = []storage.ACLRule{{Entity: storage.AllUsers, Role: storage.RoleReader}}
+			w.CacheControl = "public, max-age=86400"
+			w.ContentType = fileType
+			if _, err := io.Copy(w, fileBytes); err != nil {
+				log.Print(err)
+				context.JSON(http.StatusOK, gin.H{
+					"status":  -1,
+					"message": err.Error(),
+				})
+			}
+			if err := w.Close(); err != nil {
+				log.Print(err)
+				context.JSON(http.StatusOK, gin.H{
+					"status":  -1,
+					"message": err.Error(),
+				})
+			}
+			context.JSON(http.StatusOK, gin.H{
+				"status":  1,
+				"message": "OK",
+				"data":    file,
+			})
+		})
+
 	}
 	router.Run(fmt.Sprintf(":%d", configs.ServicePort))
 }
