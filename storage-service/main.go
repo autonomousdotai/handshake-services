@@ -127,21 +127,17 @@ func main() {
 			file = fmt.Sprintf("users/%d/%s", userID, file)
 			buffer, err := ioutil.ReadAll(context.Request.Body)
 			if err != nil {
-				if err != nil {
-					log.Print(err)
-					context.JSON(http.StatusOK, gin.H{
-						"status":  -1,
-						"message": err.Error(),
-					})
-					return
-				}
-			}
-
-			if err != nil {
 				log.Print(err)
 				context.JSON(http.StatusOK, gin.H{
 					"status":  -1,
 					"message": err.Error(),
+				})
+				return
+			}
+			if len(buffer) == 0 {
+				context.JSON(http.StatusOK, gin.H{
+					"status":  -1,
+					"message": "body is empty",
 				})
 				return
 			}
