@@ -113,7 +113,6 @@ func main() {
 			userID, _ := strconv.ParseInt(context.GetHeader("Uid"), 10, 64)
 			if userID <= 0 {
 				context.JSON(http.StatusOK, gin.H{"status": 0, "message": "User is not authorized"})
-				context.Abort()
 				return
 			}
 
@@ -123,6 +122,7 @@ func main() {
 					"status":  -1,
 					"message": "file is invalid",
 				})
+				return
 			}
 			file = fmt.Sprintf("users/%d/%s", userID, file)
 			buffer, err := ioutil.ReadAll(context.Request.Body)
@@ -133,6 +133,7 @@ func main() {
 						"status":  -1,
 						"message": err.Error(),
 					})
+					return
 				}
 			}
 
@@ -142,6 +143,7 @@ func main() {
 					"status":  -1,
 					"message": err.Error(),
 				})
+				return
 			}
 			fileBytes := bytes.NewReader(buffer)
 			fileType := http.DetectContentType(buffer)
@@ -156,6 +158,7 @@ func main() {
 					"status":  -1,
 					"message": err.Error(),
 				})
+				return
 			}
 			if err := w.Close(); err != nil {
 				log.Print(err)
@@ -163,12 +166,14 @@ func main() {
 					"status":  -1,
 					"message": err.Error(),
 				})
+				return
 			}
 			context.JSON(http.StatusOK, gin.H{
 				"status":  1,
 				"message": "OK",
 				"data":    file,
 			})
+			return
 		})
 
 	}
