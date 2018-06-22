@@ -124,7 +124,7 @@ func main() {
 					"message": "file is invalid",
 				})
 			}
-			file = fmt.Sprintf("user_%d/%s", userID, file)
+			file = fmt.Sprintf("users/%d/%s", userID, file)
 			buffer, err := ioutil.ReadAll(context.Request.Body)
 			if err != nil {
 				if err != nil {
