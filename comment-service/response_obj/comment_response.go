@@ -2,9 +2,10 @@ package response_obj
 
 import (
 	"time"
+
+	"github.com/ninjadotorg/handshake-services/comment-service/bean"
 	"github.com/ninjadotorg/handshake-services/comment-service/models"
 	"github.com/ninjadotorg/handshake-services/comment-service/utils"
-	"github.com/ninjadotorg/handshake-services/comment-service/bean"
 )
 
 type UserResponse struct {
@@ -33,7 +34,7 @@ func MakeCommentResponse(model models.Comment) CommentResponse {
 	result.UserId = model.UserId
 	result.ObjectId = model.ObjectId
 	result.Comment = model.Comment
-	result.Image = utils.CdnUrlFor(model.Image)
+	result.Image = utils.UrlFor(model.Image)
 	result.Status = model.Status
 	result.DateCreated = model.DateCreated
 	result.Address = model.Address
@@ -46,7 +47,7 @@ func MakeUserResponse(model models.User) UserResponse {
 	result.ID = model.ID
 	result.Email = model.Email
 	result.Name = model.Name
-	result.Avatar = utils.CdnUrlFor(model.Avatar)
+	result.Avatar = utils.UrlFor(model.Avatar)
 	return result
 }
 

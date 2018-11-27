@@ -18,16 +18,10 @@ func CdnUrlFor(fileUrl string) string {
 	return result
 }
 
-func CdnUrlFor2(filePath string, fileUrl string) string {
+func UrlFor(fileUrl string) string {
 	if fileUrl == "" {
 		return ""
 	}
-	result := ""
-	if configs.CdnHttps == true {
-		result += "https://"
-	} else {
-		result += "http://"
-	}
-	result += configs.CdnDomain + "/" + filePath + fileUrl
+	result := configs.GcUrl + "/" + fileUrl
 	return result
 }
