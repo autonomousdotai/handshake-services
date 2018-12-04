@@ -5,11 +5,19 @@ import (
 	"strconv"
 )
 
-var ServicePort, _ = strconv.Atoi(os.Getenv("SERVICE_PORT"))
-var DB = os.Getenv("DB")
+func getenv(key, fallback string) string {
+	value := os.Getenv(key)
+	if len(value) == 0 {
+		return fallback
+	}
+	return value
+}
+
+var ServicePort, _ = strconv.Atoi(getenv("SERVICE_PORT", "8088"))
+var DB = getenv("DB", "")
 var CdnDomain = os.Getenv("CDN_DOMAIN")
 var CdnHttps, _ = strconv.ParseBool(os.Getenv("CDN_HTTPS"))
-var DispatcherServiceUrl = os.Getenv("DISPATCHER_SERVICE_URL")
+var DispatcherServiceUrl = getenv("DISPATCHER_SERVICE_URL", "localhost:8080")
 var StorageServiceUrl = os.Getenv("STORAGE_SERVICE_URL")
-var SolrServiceUrl = os.Getenv("SOLR_SERVICE_URL")
-var GcUrl = os.Getenv("GC_URL")
+var SolrServiceUrl = getenv("SOLR_SERVICE_URL", "localhost:6000")
+var GcUrl = getenv("GC_URL", "")

@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
 	"log"
+
+	"github.com/jinzhu/gorm"
 	"github.com/ninjadotorg/handshake-services/comment-service/configs"
 )
 
