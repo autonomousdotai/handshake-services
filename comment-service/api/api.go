@@ -68,7 +68,6 @@ func (api Api) CreateComment(context *gin.Context) {
 		return
 	}
 	data := response_obj.MakeCommentResponse(comment)
-	log.Print("===== BEGIN =====")
 	count, err := commentService.CountCommentByObjectId(comment.ObjectId)
 	if err != nil {
 		result.SetStatus(bean.UnexpectedError)
@@ -77,10 +76,10 @@ func (api Api) CreateComment(context *gin.Context) {
 		return
 	}
 	hookService.CommentCountHooks(comment.ObjectId, count)
-	log.Print("===== END =====")
 	result.Data = data
 	result.Status = 1
 	result.Message = ""
+
 	context.JSON(http.StatusOK, result)
 	return
 }
