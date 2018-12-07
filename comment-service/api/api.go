@@ -1,16 +1,20 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/ninjadotorg/handshake-services/comment-service/response_obj"
-	"github.com/ninjadotorg/handshake-services/comment-service/request_obj"
-	"net/http"
-	"github.com/ninjadotorg/handshake-services/comment-service/bean"
-	"log"
-	"strconv"
-	"github.com/ninjadotorg/handshake-services/comment-service/utils"
 	"encoding/json"
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/ninjadotorg/handshake-services/comment-service/bean"
+	"github.com/ninjadotorg/handshake-services/comment-service/request_obj"
+	"github.com/ninjadotorg/handshake-services/comment-service/response_obj"
+	"github.com/ninjadotorg/handshake-services/comment-service/service"
+	"github.com/ninjadotorg/handshake-services/comment-service/utils"
 )
+
+var hookService = new(service.HookService)
 
 type Api struct {
 }
@@ -69,6 +73,16 @@ func (api Api) CreateComment(context *gin.Context) {
 	result.Status = 1
 	result.Message = ""
 	context.JSON(http.StatusOK, result)
+
+	count, err := commentService.CountCommentByObjectId(comment.ObjectId)
+	if err != nil {
+		result.SetStatus(bean.UnexpectedError)
+		result.Error = err.Error()
+		context.JSON(http.StatusOK, result)
+		return
+	}
+	hookService.CommentCountHooks(comment.ObjectId, count)
+
 	return
 }
 
