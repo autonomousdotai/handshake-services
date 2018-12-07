@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/ninjadotorg/handshake-services/comment-service/configs"
@@ -15,23 +16,29 @@ type HookService struct{}
 
 // CommentCountHooks :
 func (s HookService) CommentCountHooks(objectId string, commentNumber int) {
+	log.Print("===== 1 =====")
 	jsonData := make(map[string]interface{})
 	jsonData["objectId"] = objectId
 	jsonData["commentNumber"] = commentNumber
 	jsonValue, _ := json.Marshal(jsonData)
-
+	log.Print("===== 2 =====")
 	b := bytes.NewBuffer(jsonValue)
 
 	services := configs.DispatcherServiceUrl
 	// Send all number of comment's event to services
+	log.Print(services)
 	for _, value := range services {
+		log.Print(value)
 		fmt.Printf("Start call to hook services: %s \n", value)
 		endpoint := value
+		log.Print(string(endpoint))
 		request, _ := http.NewRequest("POST", string(endpoint), b)
 		request.Header.Set("Content-Type", "application/json")
 
 		client := &http.Client{}
 		response, err := client.Do(request)
+		log.Print(response)
+		log.Print(err)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
