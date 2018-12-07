@@ -22,41 +22,36 @@ func (s HookService) CommentCountHooks(objectId string, commentNumber int) {
 	jsonData["commentNumber"] = commentNumber
 	jsonValue, _ := json.Marshal(jsonData)
 	log.Print("===== 2 =====")
-	b := bytes.NewBuffer(jsonValue)
+	body := bytes.NewBuffer(jsonValue)
 
-	services := configs.DispatcherServiceUrl
 	// Send all number of comment's event to services
-	log.Print(services)
-	for _, value := range services {
-		log.Print(value)
-		fmt.Printf("Start call to hook services: %s \n", value)
-		endpoint := value
-		log.Print(string(endpoint))
-		request, _ := http.NewRequest("POST", string(endpoint), b)
-		request.Header.Set("Content-Type", "application/json")
+	log.Print(configs.CommentHookServicesUrl)
+	endpoint := configs.CommentHookServicesUrl
+	log.Print(string(endpoint))
+	request, _ := http.NewRequest("POST", string(endpoint), body)
+	request.Header.Set("Content-Type", "application/json")
 
-		client := &http.Client{}
-		response, err := client.Do(request)
-		log.Print(response)
-		log.Print(err)
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
+	client := &http.Client{}
+	response, err := client.Do(request)
+	log.Print(response)
+	log.Print(err)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 
-		b, _ := ioutil.ReadAll(response.Body)
+	b, _ := ioutil.ReadAll(response.Body)
 
-		var data map[string]interface{}
-		json.Unmarshal(b, &data)
-		fmt.Println("====== Result ======")
-		fmt.Println(data)
-		result, ok := data["status"]
-		message, _ := data["message"]
+	var data map[string]interface{}
+	json.Unmarshal(b, &data)
+	fmt.Println("====== Result ======")
+	fmt.Println(data)
+	result, ok := data["status"]
+	message, _ := data["message"]
 
-		if !ok || !(float64(1) == result) {
-			fmt.Println(errors.New(message.(string)))
-			return
-		}
+	if !ok || !(float64(1) == result) {
+		fmt.Println(errors.New(message.(string)))
+		return
 	}
 	return
 }
