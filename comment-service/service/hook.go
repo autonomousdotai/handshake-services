@@ -22,7 +22,7 @@ func (s HookService) CommentCountHooks(objectId string, commentNumber int) {
 	body := bytes.NewBuffer(jsonValue)
 
 	// Send all number of comment's event to services
-	endpoint := configs.CommentHookServicesUrl
+	endpoint := configs.CommentHookServiceUrl
 	request, _ := http.NewRequest("POST", string(endpoint), body)
 	request.Header.Set("Content-Type", "application/json")
 
